@@ -1,7 +1,5 @@
 import asyncio
-
 import discord
-from discord import Game
 from discord.ext.commands import Bot
 import random
 import math
@@ -16,17 +14,18 @@ async def my_background_task():
     await client.wait_until_ready()
     channel = discord.Object(id='521391289975963698')
     while not client.is_closed:
-        await client.send_message(channel,"Easy Peasy")
+        await client.send_message(channel, "Easy Peasy")
         await asyncio.sleep(300)
 
 
 @client.event
 async def on_member_join(member):
+    role = discord.utils.get(client.get_server('310350971962130432').roles, name="Not real WPCM member")
     server = member.server
     fmt = 'Welcome {0.mention} to {1.name}!'
-    print (member.roles())
+    print(member.roles())
     client.add_roles(member)
-    await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server))
+    await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server)), client.add_roles(member, role)
 
 
 @client.command(
@@ -45,13 +44,6 @@ async def dice(context):
 async def ping(context):
     await client.say(context.message.author.mention)
 
-@client.command(
-    pass_context=True
-)
-async def roles(context):
-    context.
-    for a in context.message.author.roles:
-        print (a.name+" "+str(a.id))
 
 @client.command()
 async def square(N):

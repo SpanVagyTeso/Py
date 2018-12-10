@@ -1,3 +1,6 @@
+import asyncio
+
+import discord
 from discord import Game
 from discord.ext.commands import Bot
 import random
@@ -7,6 +10,23 @@ BOT_PREFIX = "!"
 TOKEN = "NTIxMzkxNzA2OTEwNzUyNzc4.Du77YQ.F3_WjZeDXh-ZcV7fYRNqLF4hvUA"
 
 client = Bot(command_prefix=BOT_PREFIX)
+
+
+async def my_background_task():
+    await client.wait_until_ready()
+    channel = discord.Object(id='521391289975963698')
+    while not client.is_closed:
+        await client.send_message(channel,"Easy Peasy")
+        await asyncio.sleep(300)
+
+
+@client.event
+async def on_member_join(member):
+    server = member.server
+    fmt = 'Welcome {0.mention} to {1.name}!'
+    print (member.roles())
+    client.add_roles(member)
+    await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server))
 
 
 @client.command(
@@ -19,6 +39,20 @@ async def dice(context):
     await client.say(str(response) + ", " + context.message.author.mention)
 
 
+@client.command(
+    pass_context=True
+)
+async def ping(context):
+    await client.say(context.message.author.mention)
+
+@client.command(
+    pass_context=True
+)
+async def roles(context):
+    context.
+    for a in context.message.author.roles:
+        print (a.name+" "+str(a.id))
+
 @client.command()
 async def square(N):
     number = int(N) * int(N)
@@ -27,7 +61,6 @@ async def square(N):
 
 @client.event
 async def on_ready():
-    await client.change_presence(game=Game(name="Learning"))
     print("Logged in: " + client.user.name)
 
 
@@ -56,4 +89,6 @@ async def reminder():
 async def play():
     await client.say("UnderConstruction")
 
+
+client.loop.create_task(my_background_task())
 client.run(TOKEN)

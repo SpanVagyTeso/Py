@@ -5,17 +5,20 @@ import random
 import math
 
 BOT_PREFIX = "!"
-TOKEN = "NTIxMzkxNzA2OTEwNzUyNzc4.Du77YQ.F3_WjZeDXh-ZcV7fYRNqLF4hvUA"
+file = (open("token.txt").read()).split('\n')
+TOKEN = file[0]
 
 client = Bot(command_prefix=BOT_PREFIX)
 
 
 async def my_background_task():
+    counter = 0
     await client.wait_until_ready()
-    channel = discord.Object(id='521391289975963698')
     while not client.is_closed:
-        await client.send_message(channel, "Easy Peasy")
+        print(counter)
+        counter += 1
         await asyncio.sleep(300)
+
 
 
 @client.event

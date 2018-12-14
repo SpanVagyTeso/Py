@@ -3,6 +3,7 @@ import discord
 from discord.ext.commands import Bot
 import random
 import math
+import importlib
 
 BOT_PREFIX = "!"
 file = (open("token.txt").read()).split('\n')
@@ -20,7 +21,6 @@ async def my_background_task():
         await asyncio.sleep(300)
 
 
-
 @client.event
 async def on_member_join(member):
     role = discord.utils.get(client.get_server('310350971962130432').roles, name="Not real WPCM member")
@@ -28,7 +28,8 @@ async def on_member_join(member):
     fmt = 'Welcome {0.mention} to {1.name}!'
     print(member.roles())
     client.add_roles(member)
-    await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server)), client.add_roles(member, role)
+    await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server)), client.add_roles(
+        member, role)
 
 
 @client.command(
@@ -58,6 +59,7 @@ async def square(N):
 async def on_ready():
     print("Logged in: " + client.user.name)
 
+
 @client.command(
     name="q",
     description="(-b+-root(b*b-4*a*c))/(2*a)",
@@ -77,6 +79,12 @@ async def quadratic(A, B, C):
 @client.command()
 async def reminder():
     await client.say("UnderConstruction")
+
+
+# Voice things
+if not discord.opus.is_loaded():
+    discord.opus.load_opus('opus')
+importlib.import_module("Voice")
 
 
 @client.command()

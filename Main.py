@@ -58,7 +58,6 @@ async def square(N):
 async def on_ready():
     print("Logged in: " + client.user.name)
 
-
 @client.command(
     name="q",
     description="(-b+-root(b*b-4*a*c))/(2*a)",

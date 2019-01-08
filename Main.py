@@ -42,7 +42,6 @@ async def create_reminder(context,time,title,text=""):
         date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]))
     elif len(time) == 8:
         date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]),int(time[4:6]),int(time[6:8]))
-    print(date)
     print(title)
     print(text)
     await client.say(str(time)+" "+str(title)+" "+text)

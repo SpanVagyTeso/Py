@@ -33,7 +33,26 @@ async def my_background_task():
         await asyncio.sleep(60)
 
 @client.command(
-    aliases=["create_rem","cm"],
+    pass_context=True,
+    aliases=["gr","get_rem"]
+)
+async def get_reminders(context):
+    rems=reminder.get_reminders(context.message.author.id)
+    out=""
+    for rem in rems:
+        out+=rem.title+"\n"
+    await client.say(out)
+
+@client.command(
+pass_context=True,
+aliases=["dr","delete_rem"]
+)
+async def delete_reminder(context,title):
+    out=reminder.delete_reminder(context.message.author.id,title)
+    await client.say(out)
+
+@client.command(
+    aliases=["create_rem","cr"],
     pass_context=True
 )
 async def create_reminder(context,time,title,text=""):
@@ -42,9 +61,11 @@ async def create_reminder(context,time,title,text=""):
         date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]))
     elif len(time) == 8:
         date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]),int(time[4:6]),int(time[6:8]))
-    print(title)
-    print(text)
-    await client.say(str(time)+" "+str(title)+" "+text)
+    if date == None:
+        await client.say("Rossz dátum (HHNN)")
+    else:
+        reminder.create_reminder(context.message.author.id,time,title,text)
+        await client.say(str(time)+" "+str(title)+" "+text)
 
 @client.event
 async def on_member_join(member):

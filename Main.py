@@ -4,26 +4,52 @@ from discord.ext.commands import Bot
 import random
 import math
 import importlib
+import Reminder as rem
+from datetime import *
 
 BOT_PREFIX = "!"
 file = (open("token.txt").read()).split('\n')
 TOKEN = file[0]
 
 client = Bot(command_prefix=BOT_PREFIX)
-
+reminder = rem.Main()
 
 async def my_background_task():
     counter = 0
     await client.wait_until_ready()
     while not client.is_closed:
-        print(counter)
-        counter += 1
-        await asyncio.sleep(300)
+        for i in reminder.check_reminders():
+            member = None
+            for server in client.servers:
+                for mem in server.members:
+                    if member == None:
+                        if int(i[0]) == int(mem.id):
+                            member=mem
+                    else:
+                        break
+                if not member == None:
+                    break
+            await client.send_message(member,i[1]+"\n"+i[2])
+        await asyncio.sleep(60)
 
+@client.command(
+    aliases=["create_rem","cm"],
+    pass_context=True
+)
+async def create_reminder(context,time,title,text=""):
+    date= None
+    if len(time) == 4:
+        date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]))
+    elif len(time) == 8:
+        date = datetime(datetime.now().year,int(time[0:2]),int(time[2:4]),int(time[4:6]),int(time[6:8]))
+    print(date)
+    print(title)
+    print(text)
+    await client.say(str(time)+" "+str(title)+" "+text)
 
 @client.event
 async def on_member_join(member):
-    role = discord.utils.get(client.get_server('310350971962130432').roles, name="Not real WPCM member")
+    role = discord.utils.get(member.server.roles, name="Not real WPCM member")
     server = member.server
     fmt = 'Welcome {0.mention} to {1.name}!'
     print(member.roles())
@@ -57,6 +83,8 @@ async def square(N):
 
 @client.event
 async def on_ready():
+    for server in client.servers:
+        print(server.id)
     print("Logged in: " + client.user.name)
 
 
@@ -74,18 +102,6 @@ async def quadratic(A, B, C):
     else:
         await client.say("Első gyöke: " + str((-int(B) + math.sqrt(D)) / (2 * int(A))) + "\n" +
                          "Második gyöke: " + str((-int(B) - math.sqrt(D)) / (2 * int(A))))
-
-
-@client.command()
-async def reminder():
-    await client.say("UnderConstruction")
-
-
-# Voice things
-if not discord.opus.is_loaded():
-    discord.opus.load_opus('opus')
-importlib.import_module("Voice")
-
 
 @client.command()
 async def play():

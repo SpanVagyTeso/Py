@@ -5,6 +5,7 @@ import random
 import math
 import importlib
 import Reminder as rem
+import Subjects as sub
 from datetime import *
 
 BOT_PREFIX = "!"
@@ -13,6 +14,25 @@ TOKEN = file[0]
 
 client = Bot(command_prefix=BOT_PREFIX)
 reminder = rem.Main()
+subjects = sub.Main()
+
+@client.command(
+    aliases=["gs","get_sub"]
+)
+async def get_subject(tantargy):
+    sub=subjects.get_subject(tantargy)
+    out=""+sub.tantargy+"\n"+sub.gyakvez
+    await client.say(out)
+
+@client.command(
+aliases=["gss","get_subs"]
+)
+async def get_subjects():
+    subs=subjects.get_subjects()
+    out=""
+    for sub in subs:
+        out+=sub+"\n"
+    await client.say(out)
 
 async def my_background_task():
     counter = 0
@@ -88,7 +108,6 @@ async def on_member_join(member):
     await client.send_message(discord.Object(id='342709832803155968'), fmt.format(member, server)), client.add_roles(
         member, role)
 
-
 @client.command(
     description="Throws the dice for ya",
     brief="Throws the dice",
@@ -104,7 +123,6 @@ async def dice(context):
 )
 async def ping(context):
     await client.say(context.message.author.mention)
-
 
 @client.command()
 async def square(N):

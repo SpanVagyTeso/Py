@@ -6,8 +6,12 @@ class Main():
         self.subjects=[]
         for subject in listdir("Subjects\\"):
             self.load_subject("Subjects\\"+subject)
-        
-        print(self.get_subjects())
+
+
+    def get_subject(self,tantargy):
+        for sub in self.subjects:
+            if sub.tantargy == tantargy:
+                return sub
 
     def create_subject(self,tantargy,gyakvez,gyakvezemail,eido,gyakido,web):
         van=False

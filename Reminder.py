@@ -38,6 +38,16 @@ class Main():
                 out=user.Reminders
         return out
 
+    def get_reminder(self,id,title):
+        out = None
+        for user in self.users:
+            if int(user.id) == int(id):
+                for rem in user.Reminders:
+                    if rem.title == title:
+                        out=rem
+
+        return out
+
     def delete_reminder(self, id, title):
         drem = None
         for user in self.users:

@@ -36,6 +36,17 @@ async def my_background_task():
     pass_context=True,
     aliases=["gr","get_rem"]
 )
+async def get_reminer(context,title):
+    rem=reminder.get_reminder(context.message.author.id,title)
+    if rem == None:
+        await client.say("Nincs ilyen reminder.")
+    else:
+        await client.say(title+"\n"+str(rem.time)+"\n"+rem.text)
+
+@client.command(
+    pass_context=True,
+    aliases=["grs","get_rems"]
+)
 async def get_reminders(context):
     rems=reminder.get_reminders(context.message.author.id)
     out=""
